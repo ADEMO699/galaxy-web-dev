@@ -43,105 +43,17 @@
 <section class="page-content">
   <div class="container">
     <h1>Featured Projects</h1>
-    <div class="projects-gallery">
-      <!-- Images -->
-      <div class="project-item">
-        <div class="project-description">Screenshot 1</div>
-        <img src="my works/Screenshot 2026-03-15 211641.png" alt="Project Screenshot 1">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 2</div>
-        <img src="my works/Screenshot 2026-03-15 211719.png" alt="Project Screenshot 2">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 3</div>
-        <img src="my works/Screenshot 2026-03-15 211750.png" alt="Project Screenshot 3">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 4</div>
-        <img src="my works/Screenshot 2026-03-15 211821.png" alt="Project Screenshot 4">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 5</div>
-        <img src="my works/Screenshot 2026-03-15 211842.png" alt="Project Screenshot 5">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 6</div>
-        <img src="my works/Screenshot 2026-03-15 211908.png" alt="Project Screenshot 6">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 7</div>
-        <img src="my works/Screenshot 2026-03-15 211932.png" alt="Project Screenshot 7">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 8</div>
-        <img src="my works/Screenshot 2026-03-15 211949.png" alt="Project Screenshot 8">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 9</div>
-        <img src="my works/Screenshot 2026-03-15 212007.png" alt="Project Screenshot 9">
-      </div>
-      <div class="project-item">
-        <div class="project-description">Screenshot 10</div>
-        <img src="my works/Screenshot 2026-03-15 212039.png" alt="Project Screenshot 10">
-      </div>
-
-      <!-- Videos -->
-      <div class="project-item">
-        <div class="project-description">Festival Habit</div>
-        <video controls>
-          <source src="my works/festival habit.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="project-item">
-        <div class="project-description">LinkedIn Project</div>
-        <video controls>
-          <source src="my works/interlinkedin .mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="project-item">
-        <div class="project-description">My Boutique</div>
-        <video controls>
-          <source src="my works/MY-boutique.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="project-item">
-        <div class="project-description">NAFTAL Events</div>
-        <video controls>
-          <source src="my works/NAFTAL EVENTS .mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="project-item">
-        <div class="project-description">Recording</div>
-        <video controls>
-          <source src="my works/Recording 2026-03-26 020351.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="project-item">
-        <div class="project-description">Smart Study DZ</div>
-        <video controls>
-          <source src="my works/smartStudydz .mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="project-item">
-        <div class="project-description">Templates</div>
-        <video controls>
-          <source src="my works/templates.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+    <div class="projects-gallery" id="projects-gallery">
+      <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #a855f7;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
+        <p>Loading projects...</p>
       </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <p>&copy; 2026 GalaxyDev. All rights reserved.</p>
+  <p>&copy; 2026 GalaxyDev. All rights reserved. | <a href="admin.html" style="color: #a855f7; text-decoration: none;"><i class="fas fa-cog"></i> Admin</a></p>
 </footer>
 
 <script src="page-transition.js"></script>
@@ -177,6 +89,99 @@ function createParticles() {
 }
 
 window.addEventListener('load', createParticles);
+
+async function loadProjects() {
+  const gallery = document.getElementById('projects-gallery');
+  try {
+    let projects = null;
+    
+    // Check local storage sync first
+    const cachedProjects = localStorage.getItem('galaxy_projects');
+    if (cachedProjects) {
+      try {
+        projects = JSON.parse(cachedProjects);
+      } catch (e) {
+        console.warn('Failed to parse cached galaxy_projects', e);
+      }
+    }
+    
+    // Fallback to projects.json
+    if (!projects || !Array.isArray(projects) || projects.length === 0) {
+      const response = await fetch('projects.json');
+      if (!response.ok) throw new Error('Failed to load projects list');
+      projects = await response.json();
+    }
+    
+    gallery.innerHTML = '';
+    
+    if (!projects || projects.length === 0) {
+      gallery.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #a855f7;">
+        <p>No projects found. Add some from the admin panel!</p>
+      </div>`;
+      return;
+    }
+    
+    projects.forEach(project => {
+      const item = document.createElement('div');
+      item.className = 'project-item';
+      
+      const desc = document.createElement('div');
+      desc.className = 'project-description';
+      desc.textContent = project.title;
+      item.appendChild(desc);
+      
+      const mediaSrc = encodeURI(project.src);
+      
+      if (project.type === 'video') {
+        const video = document.createElement('video');
+        video.controls = true;
+        video.preload = 'metadata';
+        video.playsInline = true;
+        video.src = mediaSrc; // Direct src assignment ensures reliable HTML5 video loading
+        
+        const source = document.createElement('source');
+        source.src = mediaSrc;
+        source.type = 'video/mp4';
+        
+        video.appendChild(source);
+        
+        video.onerror = () => {
+          console.error('Failed to load video:', project.src);
+          const errOverlay = document.createElement('div');
+          errOverlay.style.cssText = 'position: absolute; bottom: 10px; left: 10px; right: 10px; color: #f87171; font-size: 0.8rem; background: rgba(0,0,0,0.8); padding: 5px; border-radius: 4px; z-index: 5; text-align: center;';
+          errOverlay.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Video media unavailable (${project.src})`;
+          item.appendChild(errOverlay);
+        };
+        
+        item.appendChild(video);
+        try { video.load(); } catch (e) {}
+      } else {
+        const img = document.createElement('img');
+        img.src = mediaSrc;
+        img.alt = project.title;
+        img.loading = 'lazy';
+        img.onerror = () => {
+          img.style.display = 'none';
+          const errOverlay = document.createElement('div');
+          errOverlay.style.cssText = 'height: 100%; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9rem; flex-direction: column; gap: 8px;';
+          errOverlay.innerHTML = `<i class="fas fa-image" style="font-size: 2rem; color: #a855f7;"></i><span>${project.title}</span>`;
+          item.appendChild(errOverlay);
+        };
+        item.appendChild(img);
+      }
+      
+      gallery.appendChild(item);
+    });
+  } catch (err) {
+    console.error(err);
+    gallery.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #ec4899;">
+      <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 15px;"></i>
+      <p>Failed to load projects. Please try again later.</p>
+    </div>`;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', loadProjects);
 
 setInterval(() => {
   const container = document.querySelector('.particles-container');

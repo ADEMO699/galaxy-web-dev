@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Galaxy Dev</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Custom Admin CSS overriding or expanding style.css */
+    .admin-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    @media (max-width: 900px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(16px);
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+      border-color: rgba(168, 85, 247, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(168, 85, 247, 0.05);
+    }
+    
+    .card-title {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #a855f7;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Login Page Styling */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+    }
+    
+    .login-card {
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #a855f7;
+      font-size: 0.9rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 8px;
+      color: #e0e0e0;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #ec4899;
+      background: rgba(168, 85, 247, 0.08);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e0e0e0;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background: rgba(236, 72, 153, 0.15);
+      border: 1px solid rgba(236, 72, 153, 0.4);
+      color: #ec4899;
+    }
+    
+    .btn-danger:hover {
+      background: rgba(236, 72, 153, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+    }
+    
+    .btn-full {
+      width: 100%;
+    }
+    
+    .help-text {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    
+    .help-text a {
+      color: #a855f7;
+      text-decoration: none;
+    }
+    
+    .help-text a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Project item rows in manager */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .project-row {
+      display: grid;
+      grid-template-columns: 60px 100px 1fr 150px;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(168, 85, 247, 0.1);
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+    
+    .project-row:hover {
+      background: rgba(168, 85, 247, 0.03);
+      border-color: rgba(168, 85, 247, 0.25);
+    }
+    
+    @media (max-width: 650px) {
+      .project-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 10px;
+      }
+      
+      .project-thumbnail {
+        margin: 0 auto;
+      }
+      
+      .project-reorder {
+        flex-direction: row !important;
+        justify-content: center;
+      }
+    }
+    
+    .project-reorder {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+    }
+    
+    .reorder-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+    
+    .reorder-btn:hover {
+      color: #a855f7;
+    }
+    
+    .reorder-btn:disabled {
+      color: #334155;
+      cursor: not-allowed;
+    }
+    
+    .project-thumbnail {
+      width: 100px;
+      height: 60px;
+      border-radius: 6px;
+      background: #1e293b;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+    
+    .project-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .project-thumbnail i {
+      font-size: 1.5rem;
+      color: #a855f7;
+    }
+    
+    .project-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .project-title-text {
+      font-weight: 600;
+      color: #e2e8f0;
+      font-size: 1rem;
+    }
+    
+    .project-meta-text {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .project-meta-text span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    .badge-image {
+      background: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+    
+    .badge-video {
+      background: rgba(236, 72, 153, 0.2);
+      color: #f472b6;
+      border: 1px solid rgba(236, 72, 153, 0.4);
+    }
+    
+    .project-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    
+    /* Modal container */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .modal {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .modal-header h3 {
+      color: #a855f7;
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .modal-close:hover {
+      color: #ec4899;
+    }
+    
+    /* File upload design */
+    .upload-area {
+      border: 2px dashed rgba(168, 85, 247, 0.3);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.01);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+      border-color: #ec4899;
+      background: rgba(168, 85, 247, 0.04);
+    }
+    
+    .upload-area i {
+      font-size: 2.5rem;
+      color: #a855f7;
+      margin-bottom: 12px;
+    }
+    
+    .upload-preview {
+      margin-top: 15px;
+      max-height: 150px;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      display: none;
+    }
+    
+    .upload-preview img, .upload-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .tab-container {
+      display: flex;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      margin-bottom: 15px;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab-btn.active {
+      color: #a855f7;
+      border-color: #a855f7;
+    }
+    
+    /* Progress spinner overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .loading-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .loading-status-list {
+      margin-top: 25px;
+      max-width: 400px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+    
+    .loading-status-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+    
+    .loading-status-item.active {
+      color: #a855f7;
+      font-weight: 600;
+    }
+    
+    .loading-status-item.success {
+      color: #4ade80;
+    }
+    
+    .loading-status-item.success i {
+      color: #4ade80;
+    }
+    
+    .loading-status-item.error {
+      color: #f87171;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Animated Background Elements -->
+<div class="background-animation">
+  <div class="bg-blur blur-1"></div>
+  <div class="bg-blur blur-2"></div>
+  <div class="bg-blur blur-3"></div>
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  <div class="floating-shape shape-3"></div>
+  <div class="floating-shape shape-4"></div>
+</div>
+
+<div class="particles-container"></div>
+<div class="animated-grid"></div>
+
+<header>
+  <div class="logo">
+    <img src="logo.png" alt="Galaxy Web Logo" class="logo-img">
+    <span class="logo-text">GALAXY WEB</span>
+  </div>
+  <nav id="header-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="#" id="logout-btn" class="nav-link" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+</header>
+
+<section class="page-content">
+  <div class="admin-wrapper">
+    <!-- Authenticated / Main Dashboard View -->
+    <div id="dashboard-view" style="display: block;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+        <h1 style="margin: 0; font-size: 2.2rem; text-align: left; background: none; -webkit-text-fill-color: initial; color: #fff;">
+          Admin Control Center
+        </h1>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button id="add-project-btn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Project
+          </button>
+          <button id="export-json-btn" class="btn btn-secondary">
+            <i class="fas fa-download"></i> Export projects.json
+          </button>
+          <button id="copy-json-btn" class="btn btn-secondary">
+            <i class="fas fa-copy"></i> Copy JSON
+          </button>
+          <button id="save-deploy-btn" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+            <i class="fas fa-cloud-upload-alt"></i> Save & Deploy to GitHub
+          </button>
+        </div>
+      </div>
+      
+      <div class="admin-grid">
+        <!-- Sidebar / Info Panel -->
+        <div class="sidebar-column">
+          <div class="glass-card">
+            <div class="card-title">
+              <i class="fas fa-info-circle"></i> Connection Status
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
+              <div>
+                <span style="color: #94a3b8;">Mode:</span>
+                <div id="status-mode" style="font-weight: 600; color: #a855f7; margin-top: 3px;">Local Storage & File Mode</div>
+              </div>
+              <div>
+                <span style="color: #94a3b8;">Repository:</span>
+                <div id="status-repo-name" style="font-weight: 600; color: #fff; margin-top: 3px; word-break: break-all;">Not connected</div>
+              </div>
+              <div>
+                <span style="color: #94a3b8;">Status:</span>
+                <div id="status-badge" style="display: inline-flex; align-items: center; gap: 6px; color: #fbbf24; font-weight: 600; margin-top: 3px;">
+                  <i class="fas fa-database"></i> Live Local Sync
+                </div>
+              </div>
+              <hr style="border: none; border-top: 1px solid rgba(168, 85, 247, 0.2); margin: 8px 0;">
+              <button id="toggle-github-modal-btn" class="btn btn-secondary btn-sm btn-full">
+                <i class="fas fa-plug"></i> GitHub Sync Settings
+              </button>
+            </div>
+          </div>
+          
+          <div class="glass-card">
+            <div class="card-title">
+              <i class="fas fa-graduation-cap"></i> Instructions
+            </div>
+            <div style="font-size: 0.85rem; line-height: 1.6; color: #cbd5e1; display: flex; flex-direction: column; gap: 10px;">
+              <p>
+                <strong>Adding Videos & Images:</strong> Click <em>"Add New Project"</em>, enter a title, choose Video or Image, and upload your file or enter a relative path (e.g. <code style="color: #ec4899;">my works/festival habit.mp4</code>).
+              </p>
+              <p>
+                <strong>Managing & Deleting:</strong> Edit titles, reorder with <i class="fas fa-chevron-up"></i> <i class="fas fa-chevron-down"></i> arrows, or delete unwanted videos/images instantly.
+              </p>
+              <p>
+                <strong>Live Local Updates:</strong> All changes save immediately to your browser and reflect directly on the main <strong>Projects page</strong>!
+              </p>
+              <p>
+                <strong>GitHub Deployment:</strong> Click <em>"Export projects.json"</em> to save your local file, or use <em>"Save & Deploy to GitHub"</em> to automatically push updates to GitHub Pages!
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main List Panel -->
+        <div class="main-column">
+          <div class="glass-card">
+            <div class="card-title" style="justify-content: space-between;">
+              <span><i class="fas fa-th-list"></i> Project Catalog</span>
+              <span id="project-count-badge" class="badge badge-image" style="font-size: 0.8rem; padding: 4px 10px; border-radius: 20px;">0 Projects</span>
+            </div>
+            
+            <div id="project-list-loading" style="text-align: center; padding: 50px 0; color: #a855f7;">
+              <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 15px;"></i>
+              <p>Retrieving project catalog...</p>
+            </div>
+            
+            <div id="project-list-empty" style="display: none; text-align: center; padding: 50px 0; color: #94a3b8;">
+              <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 15px; color: rgba(168, 85, 247, 0.4);"></i>
+              <p style="margin-bottom: 20px;">No projects found.</p>
+              <button class="btn btn-primary add-first-btn"><i class="fas fa-plus"></i> Add Your First Project</button>
+            </div>
+            
+            <div id="project-list-container" class="project-list" style="display: none;">
+              <!-- Dynamic rows go here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GitHub Connection Modal / Settings overlay -->
+    <div id="login-view" class="modal-overlay">
+      <div class="modal login-card">
+        <div class="modal-header">
+          <h3 style="margin: 0; color: #a855f7;"><i class="fas fa-lock"></i> GitHub Sync Settings</h3>
+          <button class="modal-close" id="github-modal-close-btn">&times;</button>
+        </div>
+        <p style="margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5; color: #cbd5e1;">
+          Connect your GitHub Personal Access Token (PAT) to enable auto-deploying commits to your GitHub Pages repository directly from this panel.
+        </p>
+        
+        <form id="login-form">
+          <div class="form-group">
+            <label for="git-token">GitHub Personal Access Token (PAT)</label>
+            <input type="password" id="git-token" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="current-password">
+            <div class="help-text">
+              Requires a token with <code style="color: #ec4899; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">repo</code> scope. 
+              <a href="https://github.com/settings/tokens/new?scopes=repo&description=Galaxy%20Web%20Admin" target="_blank" rel="noopener">Create one here <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i></a>.
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="git-owner">Repository Owner (Username)</label>
+            <input type="text" id="git-owner" class="form-input" value="ademo699" autocomplete="username">
+          </div>
+          
+          <div class="form-group">
+            <label for="git-repo">Repository Name</label>
+            <input type="text" id="git-repo" class="form-input" value="galaxy-web-dev">
+          </div>
+          
+          <div class="form-group">
+            <label for="git-branch">Branch</label>
+            <input type="text" id="git-branch" class="form-input" value="main">
+          </div>
+          
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;">
+              <i class="fas fa-plug"></i> Connect GitHub
+            </button>
+            <button type="button" id="disconnect-btn" class="btn btn-danger" style="display: none;">
+              <i class="fas fa-unlink"></i> Disconnect
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add / Edit Project Modal -->
+<div id="project-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add New Project</h3>
+      <button class="modal-close" id="modal-close-btn">&times;</button>
+    </div>
+    <form id="project-form">
+      <input type="hidden" id="project-edit-id">
+      
+      <div class="form-group">
+        <label for="project-title">Project Title / Description</label>
+        <input type="text" id="project-title" class="form-input" placeholder="e.g. Festival Habit, Screenshot 1" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="project-type">Media Type</label>
+        <select id="project-type" class="form-input">
+          <option value="image">Image / Screenshot</option>
+          <option value="video">Video Demonstration</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Media Source</label>
+        <div class="tab-container">
+          <button type="button" id="source-tab-upload" class="tab-btn active">Upload File</button>
+          <button type="button" id="source-tab-url" class="tab-btn">External URL / Existing Path</button>
+        </div>
+        
+        <!-- Upload Tab -->
+        <div id="source-upload-container">
+          <div class="upload-area" id="drop-zone">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p style="font-weight: 600; margin-bottom: 5px;">Drag & Drop your file here</p>
+            <p style="font-size: 0.8rem; color: #94a3b8;">or click to browse from device</p>
+            <input type="file" id="file-input" style="display: none;" accept="image/*,video/mp4">
+          </div>
+          <div id="file-info-text" style="font-size: 0.85rem; color: #4ade80; text-align: center; margin-top: 5px; display: none;">
+            <i class="fas fa-file-alt"></i> filename.ext ready
+          </div>
+        </div>
+        
+        <!-- URL Tab -->
+        <div id="source-url-container" style="display: none;">
+          <input type="text" id="project-src" class="form-input" placeholder="e.g. my works/my-file.png or https://example.com/video.mp4">
+          <div class="help-text">
+            Enter a web URL or a path relative to the repository root directory (e.g. <code style="color: #ec4899;">my works/new-file.png</code>).
+          </div>
+        </div>
+        
+        <!-- Preview -->
+        <div id="media-preview" class="upload-preview">
+          <!-- image or video element -->
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px;">
+        <button type="button" id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save to List</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Saving / Loading Overlay -->
+<div id="loading-overlay" class="loading-overlay">
+  <i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: #a855f7; margin-bottom: 20px;"></i>
+  <h2 style="font-size: 1.8rem; margin-bottom: 10px; border: none; text-align: center;">Saving & Committing Changes</h2>
+  <p id="loading-main-msg" style="color: #cbd5e1; font-size: 1.1rem; text-align: center;">Please do not close this window. Syncing with GitHub...</p>
+  
+  <div class="loading-status-list" id="loading-status-list">
+    <!-- Status updates -->
+  </div>
+  
+  <div id="loading-success-actions" style="display: none; margin-top: 30px; text-align: center;">
+    <button id="loading-done-btn" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+      <i class="fas fa-check"></i> Great, Done!
+    </button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 GalaxyDev. All rights reserved.</p>
+</footer>
+
+<script src="page-transition.js"></script>
+<script>
+// Generate animated particles
+function createParticles() {
+  const container = document.querySelector('.particles-container');
+  const particleCount = 30;
+  
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    const randomX = Math.random() * window.innerWidth;
+    const randomDuration = 8 + Math.random() * 12;
+    const randomDelay = Math.random() * 5;
+    
+    particle.style.left = randomX + 'px';
+    particle.style.top = window.innerHeight + 'px';
+    particle.style.animationDuration = randomDuration + 's';
+    particle.style.animationDelay = randomDelay + 's';
+    
+    const colors = [
+      'rgba(168, 85, 247, 0.6)',
+      'rgba(236, 72, 153, 0.5)',
+      'rgba(59, 130, 246, 0.5)',
+      'rgba(168, 85, 247, 0.4)'
+    ];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    
+    container.appendChild(particle);
+  }
+}
+
+window.addEventListener('load', createParticles);
+
+setInterval(() => {
+  const container = document.querySelector('.particles-container');
+  const particleCount = container.children.length;
+  
+  if (particleCount < 50) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    const randomX = Math.random() * window.innerWidth;
+    const randomDuration = 8 + Math.random() * 12;
+    
+    particle.style.left = randomX + 'px';
+    particle.style.top = window.innerHeight + 'px';
+    particle.style.animationDuration = randomDuration + 's';
+    
+    const colors = [
+      'rgba(168, 85, 247, 0.6)',
+      'rgba(236, 72, 153, 0.5)',
+      'rgba(59, 130, 246, 0.5)',
+      'rgba(168, 85, 247, 0.4)'
+    ];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    
+    container.appendChild(particle);
+    
+    setTimeout(() => {
+      particle.remove();
+    }, randomDuration * 1000);
+  }
+}, 300);
+</script>
+
+<script>
+// ==========================================
+// GitHub Client & Application Code
+// ==========================================
+class GitHubClient {
+  constructor(token, owner, repo, branch = 'main') {
+    this.token = token;
+    this.owner = owner;
+    this.repo = repo;
+    this.branch = branch;
+    this.baseUrl = `https://api.github.com/repos/${owner}/${repo}`;
+  }
+
+  async request(path, options = {}) {
+    const url = `${this.baseUrl}${path}`;
+    const headers = {
+      'Authorization': `token ${this.token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      ...options.headers
+    };
+    const response = await fetch(url, { ...options, headers });
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.message || `Request failed with status ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getFile(path) {
+    try {
+      const data = await this.request(`/contents/${encodeURIComponent(path)}?ref=${this.branch}`);
+      return data;
+    } catch (err) {
+      if (err.message.includes('Not Found') || err.message.includes('404')) {
+        return null;
+      }
+      throw err;
+    }
+  }
+
+  async commitFile(path, base64Content, message, sha = null) {
+    const body = {
+      message,
+      content: base64Content,
+      branch: this.branch
+    };
+    if (sha) {
+      body.sha = sha;
+    }
+    return this.request(`/contents/${encodeURIComponent(path)}`, {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    });
+  }
+}
+
+// App State
+let gitClient = null;
+let currentProjects = [];
+let originalProjectsSha = null;
+let pendingUploads = [];
+
+// DOM Elements
+const loginView = document.getElementById('login-view');
+const dashboardView = document.getElementById('dashboard-view');
+const loginForm = document.getElementById('login-form');
+const logoutBtn = document.getElementById('logout-btn');
+
+const gitTokenInput = document.getElementById('git-token');
+const gitOwnerInput = document.getElementById('git-owner');
+const gitRepoInput = document.getElementById('git-repo');
+const gitBranchInput = document.getElementById('git-branch');
+
+const statusMode = document.getElementById('status-mode');
+const statusRepoName = document.getElementById('status-repo-name');
+const statusBadge = document.getElementById('status-badge');
+
+const projectListLoading = document.getElementById('project-list-loading');
+const projectListEmpty = document.getElementById('project-list-empty');
+const projectListContainer = document.getElementById('project-list-container');
+const projectCountBadge = document.getElementById('project-count-badge');
+
+const projectModal = document.getElementById('project-modal');
+const projectForm = document.getElementById('project-form');
+const modalTitle = document.getElementById('modal-title');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalCancelBtn = document.getElementById('modal-cancel-btn');
+const addProjectBtn = document.getElementById('add-project-btn');
+const exportJsonBtn = document.getElementById('export-json-btn');
+const copyJsonBtn = document.getElementById('copy-json-btn');
+const saveDeployBtn = document.getElementById('save-deploy-btn');
+
+const toggleGithubModalBtn = document.getElementById('toggle-github-modal-btn');
+const githubModalCloseBtn = document.getElementById('github-modal-close-btn');
+const disconnectBtn = document.getElementById('disconnect-btn');
+
+const projectEditId = document.getElementById('project-edit-id');
+const projectTitle = document.getElementById('project-title');
+const projectType = document.getElementById('project-type');
+const projectSrc = document.getElementById('project-src');
+
+const sourceTabUpload = document.getElementById('source-tab-upload');
+const sourceTabUrl = document.getElementById('source-tab-url');
+const sourceUploadContainer = document.getElementById('source-upload-container');
+const sourceUrlContainer = document.getElementById('source-url-container');
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const fileInfoText = document.getElementById('file-info-text');
+const mediaPreview = document.getElementById('media-preview');
+
+const loadingOverlay = document.getElementById('loading-overlay');
+const loadingMainMsg = document.getElementById('loading-main-msg');
+const loadingStatusList = document.getElementById('loading-status-list');
+const loadingSuccessActions = document.getElementById('loading-success-actions');
+const loadingDoneBtn = document.getElementById('loading-done-btn');
+
+let activeSourceTab = 'upload'; // 'upload' or 'url'
+let uploadedFileBase64 = null;
+let uploadedFileExtension = '';
+let uploadedFileType = '';
+
+// ==========================================
+// Initialization & Lifecycle
+// ==========================================
+async function init() {
+  const savedToken = localStorage.getItem('galaxy_admin_token');
+  const savedOwner = localStorage.getItem('galaxy_admin_owner') || 'ademo699';
+  const savedRepo = localStorage.getItem('galaxy_admin_repo') || 'galaxy-web-dev';
+  const savedBranch = localStorage.getItem('galaxy_admin_branch') || 'main';
+
+  gitOwnerInput.value = savedOwner;
+  gitRepoInput.value = savedRepo;
+  gitBranchInput.value = savedBranch;
+
+  dashboardView.style.display = 'block';
+  loginView.classList.remove('active');
+
+  if (savedToken) {
+    gitTokenInput.value = savedToken;
+    try {
+      gitClient = new GitHubClient(savedToken, savedOwner, savedRepo, savedBranch);
+      updateConnectionStatus(true);
+    } catch(e) {
+      updateConnectionStatus(false);
+    }
+  } else {
+    updateConnectionStatus(false);
+  }
+
+  await loadCatalog();
+}
+
+function updateConnectionStatus(isConnected) {
+  if (isConnected && gitClient) {
+    statusMode.textContent = 'GitHub Auto-Deploy Connected';
+    statusMode.style.color = '#4ade80';
+    statusRepoName.textContent = `${gitClient.owner}/${gitClient.repo}`;
+    statusBadge.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80;"></i> Synced with GitHub';
+    statusBadge.style.color = '#4ade80';
+    if (disconnectBtn) disconnectBtn.style.display = 'inline-block';
+  } else {
+    statusMode.textContent = 'Local Storage & Direct File Mode';
+    statusMode.style.color = '#a855f7';
+    statusRepoName.textContent = 'Local Browser Session';
+    statusBadge.innerHTML = '<i class="fas fa-database" style="color: #fbbf24;"></i> Live Local Sync Active';
+    statusBadge.style.color = '#fbbf24';
+    if (disconnectBtn) disconnectBtn.style.display = 'none';
+  }
+}
+
+async function setupGitHubClient(token, owner, repo, branch) {
+  gitClient = new GitHubClient(token, owner, repo, branch);
+  try {
+    await gitClient.request('');
+    localStorage.setItem('galaxy_admin_token', token);
+    localStorage.setItem('galaxy_admin_owner', owner);
+    localStorage.setItem('galaxy_admin_repo', repo);
+    localStorage.setItem('galaxy_admin_branch', branch);
+    
+    updateConnectionStatus(true);
+    loginView.classList.remove('active');
+    alert('Successfully connected to GitHub repository!');
+    await loadCatalog();
+  } catch (err) {
+    console.error(err);
+    alert(`Failed to authenticate with GitHub: ${err.message}. Changes will still save locally.`);
+    updateConnectionStatus(false);
+  }
+}
+
+function disconnectGitHub() {
+  localStorage.removeItem('galaxy_admin_token');
+  gitClient = null;
+  updateConnectionStatus(false);
+  loginView.classList.remove('active');
+  alert('Disconnected from GitHub. App is now in Local Mode.');
+}
+
+// ==========================================
+// Catalog Load & Storage Operations
+// ==========================================
+function saveLocalState() {
+  localStorage.setItem('galaxy_projects', JSON.stringify(currentProjects));
+}
+
+async function loadCatalog() {
+  projectListLoading.style.display = 'block';
+  projectListEmpty.style.display = 'none';
+  projectListContainer.style.display = 'none';
+  
+  try {
+    // 1. Try local storage first if modified
+    const cached = localStorage.getItem('galaxy_projects');
+    if (cached) {
+      try {
+        currentProjects = JSON.parse(cached);
+        showProjectsList();
+        return;
+      } catch (e) {
+        console.warn('Failed to parse localStorage galaxy_projects', e);
+      }
+    }
+    
+    // 2. Try fetching projects.json from GitHub if connected
+    if (gitClient) {
+      const fileData = await gitClient.getFile('projects.json');
+      if (fileData) {
+        originalProjectsSha = fileData.sha;
+        const jsonText = decodeURIComponent(escape(atob(fileData.content.replace(/\s/g, ''))));
+        currentProjects = JSON.parse(jsonText);
+        saveLocalState();
+        showProjectsList();
+        return;
+      }
+    }
+    
+    // 3. Fallback to local projects.json file
+    const res = await fetch('projects.json');
+    if (res.ok) {
+      currentProjects = await res.json();
+      saveLocalState();
+    } else {
+      currentProjects = [];
+    }
+    showProjectsList();
+  } catch (err) {
+    console.error('Error loading projects:', err);
+    projectListLoading.style.display = 'none';
+    projectListEmpty.style.display = 'block';
+  }
+}
+
+function showProjectsList() {
+  projectListLoading.style.display = 'none';
+  projectCountBadge.textContent = `${currentProjects.length} Projects`;
+  
+  if (currentProjects.length === 0) {
+    projectListEmpty.style.display = 'block';
+    projectListContainer.style.display = 'none';
+    return;
+  }
+  
+  projectListEmpty.style.display = 'none';
+  projectListContainer.style.display = 'flex';
+  projectListContainer.innerHTML = '';
+  
+  currentProjects.forEach((project, index) => {
+    const row = document.createElement('div');
+    row.className = 'project-row';
+    row.dataset.id = project.id;
+    
+    // Reorder column
+    const reorderCol = document.createElement('div');
+    reorderCol.className = 'project-reorder';
+    
+    const upBtn = document.createElement('button');
+    upBtn.type = 'button';
+    upBtn.className = 'reorder-btn';
+    upBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    upBtn.disabled = index === 0;
+    upBtn.onclick = () => moveProject(index, -1);
+    
+    const downBtn = document.createElement('button');
+    downBtn.type = 'button';
+    downBtn.className = 'reorder-btn';
+    downBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+    downBtn.disabled = index === currentProjects.length - 1;
+    downBtn.onclick = () => moveProject(index, 1);
+    
+    reorderCol.appendChild(upBtn);
+    reorderCol.appendChild(downBtn);
+    row.appendChild(reorderCol);
+    
+    // Thumbnail column
+    const thumbCol = document.createElement('div');
+    thumbCol.className = 'project-thumbnail';
+    const mediaSrc = encodeURI(project.src);
+    
+    if (project.type === 'video') {
+      const vid = document.createElement('video');
+      vid.src = mediaSrc;
+      vid.preload = 'metadata';
+      vid.muted = true;
+      vid.style.width = '100%';
+      vid.style.height = '100%';
+      vid.style.objectFit = 'cover';
+      vid.onerror = () => {
+        thumbCol.innerHTML = '<i class="fas fa-video"></i>';
+      };
+      thumbCol.appendChild(vid);
+    } else {
+      const img = document.createElement('img');
+      img.src = mediaSrc;
+      img.alt = project.title;
+      img.onerror = () => {
+        thumbCol.innerHTML = '<i class="fas fa-image"></i>';
+      };
+      thumbCol.appendChild(img);
+    }
+    row.appendChild(thumbCol);
+    
+    // Details column
+    const detailsCol = document.createElement('div');
+    detailsCol.className = 'project-details';
+    
+    const titleText = document.createElement('div');
+    titleText.className = 'project-title-text';
+    titleText.textContent = project.title;
+    
+    const metaText = document.createElement('div');
+    metaText.className = 'project-meta-text';
+    
+    const typeBadge = document.createElement('span');
+    typeBadge.className = `badge badge-${project.type}`;
+    typeBadge.textContent = project.type;
+    
+    const srcSpan = document.createElement('span');
+    srcSpan.innerHTML = `<i class="fas fa-link" style="font-size: 0.75rem;"></i> ${project.src}`;
+    srcSpan.style.wordBreak = 'break-all';
+    
+    metaText.appendChild(typeBadge);
+    metaText.appendChild(srcSpan);
+    
+    detailsCol.appendChild(titleText);
+    detailsCol.appendChild(metaText);
+    row.appendChild(detailsCol);
+    
+    // Actions column
+    const actionsCol = document.createElement('div');
+    actionsCol.className = 'project-actions';
+    
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'btn btn-secondary btn-sm';
+    editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+    editBtn.onclick = () => openEditModal(project);
+    
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'btn btn-danger btn-sm';
+    delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+    delBtn.onclick = () => deleteProject(project.id);
+    
+    actionsCol.appendChild(editBtn);
+    actionsCol.appendChild(delBtn);
+    row.appendChild(actionsCol);
+    
+    projectListContainer.appendChild(row);
+  });
+}
+
+// ==========================================
+// Reorder & Delete Operations
+// ==========================================
+function moveProject(index, direction) {
+  const targetIndex = index + direction;
+  if (targetIndex < 0 || targetIndex >= currentProjects.length) return;
+  
+  const temp = currentProjects[index];
+  currentProjects[index] = currentProjects[targetIndex];
+  currentProjects[targetIndex] = temp;
+  
+  saveLocalState();
+  showProjectsList();
+}
+
+function deleteProject(id) {
+  if (!confirm('Are you sure you want to delete this project?')) return;
+  
+  pendingUploads = pendingUploads.filter(up => up.id !== id);
+  currentProjects = currentProjects.filter(p => p.id !== id);
+  
+  saveLocalState();
+  showProjectsList();
+}
+
+// ==========================================
+// Modal Operations
+// ==========================================
+function openAddModal() {
+  modalTitle.textContent = 'Add New Project';
+  projectForm.reset();
+  projectEditId.value = '';
+  
+  uploadedFileBase64 = null;
+  uploadedFileType = '';
+  uploadedFileExtension = '';
+  
+  fileInfoText.style.display = 'none';
+  mediaPreview.style.display = 'none';
+  
+  setSourceTab('upload');
+  projectModal.classList.add('active');
+}
+
+function openEditModal(project) {
+  modalTitle.textContent = 'Edit Project';
+  projectEditId.value = project.id;
+  projectTitle.value = project.title;
+  projectType.value = project.type;
+  projectSrc.value = project.src;
+  
+  uploadedFileBase64 = null;
+  uploadedFileType = '';
+  uploadedFileExtension = '';
+  
+  fileInfoText.style.display = 'none';
+  showPreview(project.src, project.type);
+  setSourceTab('url');
+  
+  projectModal.classList.add('active');
+}
+
+function closeModal() {
+  projectModal.classList.remove('active');
+}
+
+function setSourceTab(tab) {
+  activeSourceTab = tab;
+  if (tab === 'upload') {
+    sourceTabUpload.classList.add('active');
+    sourceTabUrl.classList.remove('active');
+    sourceUploadContainer.style.display = 'block';
+    sourceUrlContainer.style.display = 'none';
+  } else {
+    sourceTabUpload.classList.remove('active');
+    sourceTabUrl.classList.add('active');
+    sourceUploadContainer.style.display = 'none';
+    sourceUrlContainer.style.display = 'block';
+  }
+}
+
+function handleFileInput(files) {
+  if (files.length === 0) return;
+  const file = files[0];
+  
+  if (file.type.startsWith('image/')) {
+    projectType.value = 'image';
+  } else if (file.type.startsWith('video/')) {
+    projectType.value = 'video';
+  }
+  
+  if (!projectTitle.value) {
+    projectTitle.value = file.name.replace(/\.[^/.]+$/, "");
+  }
+  
+  fileInfoText.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+  fileInfoText.style.display = 'block';
+  
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => {
+    uploadedFileBase64 = reader.result.split(',')[1];
+    uploadedFileType = file.type;
+    uploadedFileExtension = file.name.split('.').pop();
+    
+    showPreview(reader.result, file.type.startsWith('video/') ? 'video' : 'image');
+  };
+}
+
+function showPreview(src, type) {
+  mediaPreview.innerHTML = '';
+  mediaPreview.style.display = 'block';
+  
+  const mediaSrc = encodeURI(src);
+  if (type === 'video') {
+    const video = document.createElement('video');
+    video.src = mediaSrc;
+    video.controls = true;
+    video.style.maxWidth = '100%';
+    video.style.maxHeight = '150px';
+    mediaPreview.appendChild(video);
+  } else {
+    const img = document.createElement('img');
+    img.src = mediaSrc;
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '150px';
+    mediaPreview.appendChild(img);
+  }
+}
+
+// ==========================================
+// Export & Copy Helpers
+// ==========================================
+function exportJson() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentProjects, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "projects.json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+
+function copyJson() {
+  navigator.clipboard.writeText(JSON.stringify(currentProjects, null, 2)).then(() => {
+    alert('projects.json content copied to clipboard!');
+  }).catch(err => {
+    alert('Failed to copy to clipboard: ' + err);
+  });
+}
+
+// ==========================================
+// GitHub Deploy Logic
+// ==========================================
+async function submitSaveAndDeploy() {
+  if (!gitClient) {
+    if (confirm('GitHub integration is not connected. Open GitHub Sync Settings to configure your Personal Access Token?')) {
+      loginView.classList.add('active');
+    }
+    return;
+  }
+
+  if (currentProjects.length === 0 && !confirm('Your catalog is empty. Committing will clear all projects from projects.json. Continue?')) {
+    return;
+  }
+  
+  loadingStatusList.innerHTML = '';
+  loadingSuccessActions.style.display = 'none';
+  loadingOverlay.classList.add('active');
+  
+  try {
+    // 1. Upload pending media files
+    const uploadCount = pendingUploads.length;
+    for (let i = 0; i < uploadCount; i++) {
+      const item = pendingUploads[i];
+      addStatusItem(`upload_${item.id}`, `Uploading ${item.name} to GitHub...`, 'active');
+      
+      const repoPath = item.repoPath || `my works/${item.name}.${item.ext}`;
+      await gitClient.commitFile(repoPath, item.base64, `Upload project media: ${item.name}`);
+      
+      const projIndex = currentProjects.findIndex(p => p.id === item.id);
+      if (projIndex !== -1) {
+        currentProjects[projIndex].src = repoPath;
+      }
+      
+      updateStatusItem(`upload_${item.id}`, `Successfully uploaded ${item.name} to "${repoPath}"`, 'success');
+    }
+    
+    pendingUploads = [];
+    
+    // 2. Commit updated projects.json
+    addStatusItem('json_commit', 'Committing updated projects.json...', 'active');
+    
+    // Fetch current SHA if we don't have it (e.g. loaded from localStorage cache)
+    if (!originalProjectsSha) {
+      const existingFile = await gitClient.getFile('projects.json');
+      if (existingFile) {
+        originalProjectsSha = existingFile.sha;
+      }
+    }
+    
+    const updatedJsonContent = JSON.stringify(currentProjects, null, 2);
+    const base64Json = btoa(unescape(encodeURIComponent(updatedJsonContent)));
+    
+    const commitRes = await gitClient.commitFile('projects.json', base64Json, 'admin: update project catalog', originalProjectsSha);
+    originalProjectsSha = commitRes.content.sha;
+    
+    updateStatusItem('json_commit', 'Successfully committed projects.json', 'success');
+    
+    saveLocalState();
+    
+    loadingMainMsg.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; font-size: 1.5rem; margin-right: 8px;"></i> Changes committed successfully to GitHub!';
+    loadingSuccessActions.style.display = 'block';
+    
+  } catch (err) {
+    console.error(err);
+    addStatusItem('error_item', `Error saving to GitHub: ${err.message}`, 'error');
+    loadingMainMsg.textContent = 'GitHub Commit Failed!';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn btn-secondary';
+    closeBtn.style.marginTop = '20px';
+    closeBtn.textContent = 'Dismiss';
+    closeBtn.onclick = () => loadingOverlay.classList.remove('active');
+    loadingStatusList.appendChild(closeBtn);
+  }
+}
+
+function addStatusItem(id, text, state) {
+  const item = document.createElement('div');
+  item.id = `status_${id}`;
+  item.className = `loading-status-item ${state}`;
+  
+  let iconClass = 'fa-spinner fa-spin';
+  if (state === 'success') iconClass = 'fa-check-circle';
+  if (state === 'error') iconClass = 'fa-exclamation-circle';
+  
+  item.innerHTML = `<i class="fas ${iconClass}"></i> <span>${text}</span>`;
+  loadingStatusList.appendChild(item);
+}
+
+function updateStatusItem(id, text, state) {
+  const item = document.getElementById(`status_${id}`);
+  if (!item) return;
+  
+  item.className = `loading-status-item ${state}`;
+  let iconClass = 'fa-spinner fa-spin';
+  if (state === 'success') iconClass = 'fa-check-circle';
+  if (state === 'error') iconClass = 'fa-exclamation-circle';
+  
+  item.innerHTML = `<i class="fas ${iconClass}"></i> <span>${text}</span>`;
+}
+
+// ==========================================
+// Event Listeners & Binding
+// ==========================================
+loginForm.onsubmit = async (e) => {
+  e.preventDefault();
+  const token = gitTokenInput.value.trim();
+  const owner = gitOwnerInput.value.trim();
+  const repo = gitRepoInput.value.trim();
+  const branch = gitBranchInput.value.trim();
+  
+  if (!token || !owner || !repo || !branch) {
+    alert('Please fill all fields.');
+    return;
+  }
+  
+  const submitBtn = loginForm.querySelector('button[type="submit"]');
+  const origHtml = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+  
+  await setupGitHubClient(token, owner, repo, branch);
+  
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = origHtml;
+};
+
+if (disconnectBtn) disconnectBtn.onclick = disconnectGitHub;
+
+toggleGithubModalBtn.onclick = () => loginView.classList.add('active');
+githubModalCloseBtn.onclick = () => loginView.classList.remove('active');
+
+addProjectBtn.onclick = openAddModal;
+document.querySelectorAll('.add-first-btn').forEach(btn => btn.onclick = openAddModal);
+
+exportJsonBtn.onclick = exportJson;
+copyJsonBtn.onclick = copyJson;
+
+modalCloseBtn.onclick = closeModal;
+modalCancelBtn.onclick = closeModal;
+projectModal.onclick = (e) => {
+  if (e.target === projectModal) closeModal();
+};
+
+sourceTabUpload.onclick = () => setSourceTab('upload');
+sourceTabUrl.onclick = () => setSourceTab('url');
+
+dropZone.onclick = () => fileInput.click();
+dropZone.ondragover = (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+};
+dropZone.ondragleave = () => {
+  dropZone.classList.remove('dragover');
+};
+dropZone.ondrop = (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  handleFileInput(e.dataTransfer.files);
+};
+fileInput.onchange = () => handleFileInput(fileInput.files);
+
+projectForm.onsubmit = (e) => {
+  e.preventDefault();
+  const id = projectEditId.value || `local_${Date.now()}`;
+  const title = projectTitle.value.trim();
+  const type = projectType.value;
+  let src = '';
+  
+  if (activeSourceTab === 'upload') {
+    if (!uploadedFileBase64 && !projectEditId.value) {
+      alert('Please upload a file or enter a relative media path / URL.');
+      return;
+    }
+    
+    if (uploadedFileBase64) {
+      const filename = fileInput.files[0] ? fileInput.files[0].name : `${title}.${uploadedFileExtension}`;
+      const repoPath = `my works/${filename}`;
+      
+      pendingUploads = pendingUploads.filter(up => up.id !== id);
+      pendingUploads.push({
+        id,
+        base64: uploadedFileBase64,
+        type,
+        ext: uploadedFileExtension,
+        name: title,
+        repoPath
+      });
+      
+      // Save data URL or relative path so media loads instantly
+      src = `data:${uploadedFileType};base64,${uploadedFileBase64}`;
+    } else {
+      const orig = currentProjects.find(p => p.id === id);
+      src = orig ? orig.src : '';
+    }
+  } else {
+    src = projectSrc.value.trim();
+    if (!src) {
+      alert('Please specify a URL or media path.');
+      return;
+    }
+    pendingUploads = pendingUploads.filter(up => up.id !== id);
+  }
+  
+  const projectObj = { id, type, title, src };
+  
+  if (projectEditId.value) {
+    const idx = currentProjects.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      currentProjects[idx] = projectObj;
+    }
+  } else {
+    currentProjects.push(projectObj);
+  }
+  
+  saveLocalState();
+  closeModal();
+  showProjectsList();
+};
+
+saveDeployBtn.onclick = submitSaveAndDeploy;
+loadingDoneBtn.onclick = () => {
+  loadingOverlay.classList.remove('active');
+};
+
+// Start the admin app
+init();
+</script>
+</body>
+</html>
+</script>
+</body>
+</html>
