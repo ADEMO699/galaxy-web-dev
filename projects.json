@@ -1,8 +1,92 @@
 [
   {
-    "id": "local_1787225737927",
+    "id": "3",
+    "type": "image",
+    "title": "Screenshot 3",
+    "src": "my works/Screenshot 2026-03-15 211750.png"
+  },
+  {
+    "id": "4",
+    "type": "image",
+    "title": "Screenshot 4",
+    "src": "my works/Screenshot 2026-03-15 211821.png"
+  },
+  {
+    "id": "5",
+    "type": "image",
+    "title": "Screenshot 5",
+    "src": "my works/Screenshot 2026-03-15 211842.png"
+  },
+  {
+    "id": "6",
+    "type": "image",
+    "title": "Screenshot 6",
+    "src": "my works/Screenshot 2026-03-15 211908.png"
+  },
+  {
+    "id": "7",
+    "type": "image",
+    "title": "Screenshot 7",
+    "src": "my works/Screenshot 2026-03-15 211932.png"
+  },
+  {
+    "id": "8",
+    "type": "image",
+    "title": "Screenshot 8",
+    "src": "my works/Screenshot 2026-03-15 211949.png"
+  },
+  {
+    "id": "9",
+    "type": "image",
+    "title": "Screenshot 9",
+    "src": "my works/Screenshot 2026-03-15 212007.png"
+  },
+  {
+    "id": "10",
+    "type": "image",
+    "title": "Screenshot 10",
+    "src": "my works/Screenshot 2026-03-15 212039.png"
+  },
+  {
+    "id": "11",
     "type": "video",
-    "title": "Naftal site",
-    "src": "my works/video_1787225747256_957.mp4"
+    "title": "Festival Habit",
+    "src": "my works/festival habit.mp4"
+  },
+  {
+    "id": "12",
+    "type": "video",
+    "title": "LinkedIn Project",
+    "src": "my works/interlinkedin .mp4"
+  },
+  {
+    "id": "13",
+    "type": "video",
+    "title": "My Boutique",
+    "src": "my works/MY-boutique.mp4"
+  },
+  {
+    "id": "14",
+    "type": "video",
+    "title": "NAFTAL Events",
+    "src": "my works/NAFTAL EVENTS .mp4"
+  },
+  {
+    "id": "15",
+    "type": "video",
+    "title": "Recording",
+    "src": "my works/Recording 2026-03-26 020351.mp4"
+  },
+  {
+    "id": "16",
+    "type": "video",
+    "title": "Smart Study DZ",
+    "src": "my works/smartStudydz .mp4"
+  },
+  {
+    "id": "17",
+    "type": "video",
+    "title": "Templates",
+    "src": "my works/templates.mp4"
   }
 ]
